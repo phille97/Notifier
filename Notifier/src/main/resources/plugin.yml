@@ -1,0 +1,43 @@
+name: Notifier
+main: io.github.phille97.notifier.Notifier
+version: 2
+description: You will recive an alert of somekind when someone mentions your name
+author: phille97
+website: http://dev.bukkit.org/bukkit-plugins/mention-notifier/
+prefix: Notifier
+
+permissions:
+  notifier.*:
+    description: Gives access to all notifier commands
+    default: op
+    children:
+        notifier.admin: true
+        notifier.menu: true
+        notifier.nudge: true
+        notifier.use: true
+  notifier.admin:
+    default: op
+    children:
+        notifier.menu: true
+        notifier.nudge: true
+        notifier.use: true
+  notifier.menu:
+    default: op
+  notifier.nudge:
+    default: op
+  notifier.use:
+    default: true
+
+commands:
+ notifier:
+  description: Info about the plugin and admin control
+  permission: notifier.menu
+  usage: /notifier [option]
+ notify:
+  description: Enable and disable notifications
+  permission: notifier.use
+  usage: Just type /notify
+ nudge:
+  description: Nudge a player
+  permission: notifier.nudge
+  usage: /nudge [player]

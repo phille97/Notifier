@@ -1,0 +1,14 @@
+# http://dev.bukkit.org/bukkit-plugins/mention-notifier/
+
+# DO NOT TOUCH THIS VALUE
+version: 1
+
+# This decides if notifications should be on by default
+mention_user_default: false
+# If the plugin only should be available to OP and players with permission
+notifier_useperms: false
+# List of words that admins will be notified about (if admin_words_use is true).
+admin_words_use: false
+admin_words:
+    - hacker
+    - help
