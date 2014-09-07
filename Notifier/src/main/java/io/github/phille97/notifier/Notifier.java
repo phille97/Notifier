@@ -12,7 +12,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Notifier extends JavaPlugin {
-	public static final String PLUGIN_VERSION = "0.0.2";
+	public static final String PLUGIN_VERSION = "0.1.0";
 	public static final String PLUGIN_NAME = "Notifier";
 	public static boolean mention_user_default = false; // TODO Use me!
 	public static boolean notifier_useperms = false; // TODO Use me!

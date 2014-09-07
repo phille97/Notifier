@@ -1,6 +1,6 @@
 name: Notifier
 main: io.github.phille97.notifier.Notifier
-version: 2
+version: 0.1
 description: You will recive an alert of somekind when someone mentions your name
 author: phille97
 website: http://dev.bukkit.org/bukkit-plugins/mention-notifier/
