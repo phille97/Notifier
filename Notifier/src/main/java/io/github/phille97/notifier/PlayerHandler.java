@@ -11,17 +11,18 @@ public class PlayerHandler {
 	
 	private UUID uuid;
 	private ArrayList<String> words;
+        private boolean enabled;
 	
-	public PlayerHandler(Player player){
+	public PlayerHandler(Player player, boolean enable){
 		this.words = new ArrayList<String>();
 		this.uuid = player.getUniqueId();
 		// Enable
-		
-		notify(2);
+                this.enabled = enable;
 	}
 	
 	public void disable(){
-		// Disable
+                // Disable
+                this.enabled = false;
 	}
 	
 	public String getPlayerName(){
@@ -29,14 +30,13 @@ public class PlayerHandler {
 	}
 	
 	public void notify(int times){
+                if(!this.enabled) return;
 		for(int i=0; i < times; i++){
 			if(getMe() != null){
 				getMe().playSound(getMe().getLocation(), Sound.CLICK, 1, 1);
 			}
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-			}
+			try { Thread.sleep(100);
+			} catch (InterruptedException e) {}
 		}
 	}
 	
@@ -61,7 +61,7 @@ public class PlayerHandler {
 		}
 	}
 	
-	public void clearList(){
+	public void clearWordList(){
 		words.clear();
 	}
 	

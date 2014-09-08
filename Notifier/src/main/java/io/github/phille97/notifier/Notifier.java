@@ -1,7 +1,7 @@
 package io.github.phille97.notifier;
 
 import java.util.ArrayList;
-
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,7 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Notifier extends JavaPlugin {
 	public static final String PLUGIN_VERSION = "0.1.0";
 	public static final String PLUGIN_NAME = "Notifier";
-	public static boolean mention_user_default = false; // TODO Use me!
+	public static boolean mention_user_default = false;
 	public static boolean notifier_useperms = false; // TODO Use me!
 	public static String[] admin_words; // TODO Use me!
 	private ArrayList<PlayerHandler> players = new ArrayList<PlayerHandler>();
@@ -28,11 +28,18 @@ public class Notifier extends JavaPlugin {
 		} catch (InvalidConfigException e) {
 			this.getLogger().warning(e.getMessage());
 		}
+                for(Player p : Bukkit.getOnlinePlayers()) {
+                    PlayerHandler ph = new PlayerHandler(p, mention_user_default);
+                    players.add(ph);
+                }
     }
  
     @Override
     public void onDisable() {
-        // TODO Insert logic to be performed when the plugin is disabled
+        for(PlayerHandler ph : players){
+            ph.disable();
+        }
+       players.clear();
     }
     
     private void loadConfig() throws InvalidConfigException{
@@ -84,7 +91,7 @@ public class Notifier extends JavaPlugin {
     				return true;
     			}
     			// Enable
-    			PlayerHandler ph = new PlayerHandler(player);
+    			PlayerHandler ph = new PlayerHandler(player, true);
     			players.add(ph);
     			player.sendMessage(PLUGIN_NAME + " enabled!");
     			showConsole("Enabled player: " + player.getName());
@@ -95,17 +102,20 @@ public class Notifier extends JavaPlugin {
     		if(args.length != 1) return false;
     		String name = args[0];
     		if (!(sender instanceof Player)) {
-    			sender.sendMessage("Notifying player.");
+    			sender.sendMessage("Notifying player!");
+                        this.notifyPlayer(name);
     		} else {
     			Player player = (Player) sender;
-    			player.sendMessage("This feature is only avavible in the console!");
+    			player.sendMessage("This command is only available for the console!");
+                        // this.notifyPlayer(name);
+                        // TODO Set delay for players without the right permission.
     		}
     		return true;
     	}
     	return false; 
     }
     
-    public String[] getEnabledUsers(){
+    private String[] getEnabledUsers(){
     	ArrayList<String> list = new ArrayList<String>();
     	for(PlayerHandler ph : players){
     		list.add(ph.getPlayerName());
@@ -121,7 +131,10 @@ public class Notifier extends JavaPlugin {
     	getLogger().info(text);
     }
     
-    // Notifies the specified player.
+    /**
+     * Notifies the specified player with a sound.
+     * @param playername The players ingame name to be notified.
+     */
     public void notifyPlayer(String playername){
     	for(PlayerHandler player : players){
     		if(player.getPlayerName().equalsIgnoreCase(playername)){
@@ -130,6 +143,9 @@ public class Notifier extends JavaPlugin {
     	}
     }
     
+    /**
+     * Notifies all the admins with a sound.
+     */
     public void notifyAdmins(){
     	for(PlayerHandler player : players){
     		if(player.isAdmin()){
@@ -148,11 +164,11 @@ public class Notifier extends JavaPlugin {
     		for(String p : players){
     			int i = message.indexOf(p);
     			if(i == -1){
-    				// do not contain
+    				// No words to be notified about.
     				continue;
     			}
     			if(p.equalsIgnoreCase(playername)){
-    				// This player typed his own name. Good job!
+    				// This player typed his own name.
     				continue;
     			}
     			notifyPlayer(p);
